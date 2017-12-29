@@ -1,3 +1,5 @@
+https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/practice-problems/algorithm/oliver-and-the-battle-1/
+
 Colonel Oliver and his battalion were in midst of a battle against an extraterrestrial species Zomni. The Colonel has to win the battle at any cost to save all of humanity. He was short of soldiers, however, he had a very powerful weapon bazooka which could be used only once during the war.
 
 The Zomni army was divided into small troops scattered at different locations (which can be contained in a N x M battle ground). The bazooka, once launched on some troop is capable of killing all the Zomnis of that troop at a time but cannot harm any Zomni soldier in other troops.
