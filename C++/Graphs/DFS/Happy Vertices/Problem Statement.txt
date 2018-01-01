@@ -1,0 +1,61 @@
+https://www.hackerearth.com/practice/algorithms/graphs/depth-first-search/practice-problems/algorithm/happy-vertices/
+
+You are given a graph with 
+N
+N vertices and 
+M
+M edges. Master parent is the vertex which has no parent but may have 0 or more children. In any connected component of the graph,vertex with the lowest value in that component serves as the master parent. 
+A vertex is called happy if it has more children than its parent. Count the number of happy vertices in the given graph.The graph has no cycles or self loops.
+
+Input Format:
+
+First line consists of two space separated integers denoting 
+N
+N and 
+M
+M and the following 
+M
+M lines consist of two space separated integers 
+X
+X and 
+Y
+Y denoting there is an edge between vertices 
+X
+X and 
+Y
+Y.
+
+Output Format:
+
+Print the number of happy vertices in the graph.
+
+Constraints:
+1
+=
+N
+=
+100000
+1=N=100000
+0
+=
+M
+=
+N
+-
+1
+0=M=N-1 
+1
+=
+X
+,
+Y
+=
+N
+1=X,Y=N
+SAMPLE INPUT 
+4 3
+1 2
+2 3
+2 4
+SAMPLE OUTPUT 
+1
