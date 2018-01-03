@@ -1,0 +1,17 @@
+Iterative solutions may not be fast if not wisely implemented as you will calculate values of all squares before concluding final answer.
+
+Sometimes you can try take weights(in case of knapsack) first and reject later only when required. This will be faster.
+In usual iterative we calculate values for all 0 to Capacity when we might really need only a few if we keep picking.
+This is more true for a lot of numbers in the array.
+
+Proof:
+
+Let us assume there is only one way you can make that sum
+
+1 means item selected, 0 otherwise
+
+011001101
+
+Since we dont know which number is where, we can say that each index has 50% of being selected
+Now if we can have multiple solution, this probability of selecting will be greater than 50%
+Therefore it is more likely for a number to be selected than not so if you selected something you should reach solution faster than not selecting it. (On average)

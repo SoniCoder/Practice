@@ -1,3 +1,5 @@
+#https://practice.geeksforgeeks.org/problems/longest-palindromic-subsequence/0
+
 t = int(input())
 
 def solve(str1, str2, size1, size2, dp):
