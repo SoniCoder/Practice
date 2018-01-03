@@ -1,0 +1,20 @@
+Output Stats (100 million prints of hello world)
+
+printf cin.tie=default sync=on  2s
+cout   cin.tie=NULL    sync=off 1.8
+
+
+Output Stats (100 million prints of integers)
+
+printf cin.tie=NULL    sync=off  5.2s
+cout    cin.tie=NULL    sync=off  5.2s
+
+Input Stats (100 million integer reads from file)
+
+scanf	defaults	7.6 secs
+scanf   opti on		7.6 secs
+cin	opti on		6 secs
+cin	opti off	26.5 secs
+fastscan 		6
+fastscan unlocked	2
+
