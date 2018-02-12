@@ -1,0 +1,3 @@
+[submodule "MPI/A11"]
+	path = MPI/A11
+	url = https://github.com/SoniCoder/Parallel_Computing-2018
