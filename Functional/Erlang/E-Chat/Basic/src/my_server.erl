@@ -8,15 +8,15 @@ start(Module, InitialState) ->
     register(chatsv, Pid=spawn(fun () -> init(Module, InitialState) end)),
     Pid.
 
-start_link(Module, InitialState) ->
-    register(chatsv, Pid=spawn_link(fun () -> init(Module, InitialState) end)),
+start_link(Module, InitialState) ->    register(chatsv, Pid=spawn_link(fun () -> init(Module, InitialState) end)),
     Pid.
 
 call(Pid, Msg) ->
     Ref = erlang:monitor(process, Pid),
     Pid ! {sync, self(), Ref, Msg},
     receive
-      {Ref, Reply} -> erlang:demonitor(Ref, [flush]), Reply;
+      {Ref, Reply} -> 
+          erlang:demonitor(Ref, [flush]), Reply;
       {'DOWN', Ref, process, Pid, Reason} ->
 	  erlang:error(Reason)
       after 5000 -> erlang:error(timeout)
