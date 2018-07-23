@@ -7,8 +7,9 @@
 	 monitor, next_char = "X", from}).
 
 %% public API
--export([accept_connect/1, connect/2, decide_move/2,
-	 move/3, printBoard/1, start/1, start_link/1]).
+-export([accept_connect/1, cancel/1, connect/2,
+	 decide_move/2, move/3, printBoard/1, start/1,
+	 start_link/1]).
 
 %% gen_fsm callbacks
 -export([code_change/4, handle_event/3, handle_info/3,
@@ -50,14 +51,8 @@ move(OwnPid, OtherPid, X) ->
     gen_fsm:send_event(OwnPid, {moveMade, X}),
     gen_fsm:send_event(OtherPid, {moveMade, X}).
 
-make_offer(OwnPid, Item) ->
-    gen_fsm:send_event(OwnPid, {make_offer, Item}).
-
-%% Send an item on the table to be traded
-
-%% Cancel trade offer
-retract_offer(OwnPid, Item) ->
-    gen_fsm:send_event(OwnPid, {retract_offer, Item}).
+cancel(OwnPid) ->
+    gen_fsm:sync_send_all_state_event(OwnPid, cancel).
 
 % Ask the other FSM's Pid for a trade session
 ask_negotiate(OtherPid, OwnPid) ->
@@ -93,10 +88,12 @@ checkBoard(Board) ->
        L3 == L5, L5 == L7, L3 /= "_" -> Winner = L3;
        true -> Winner = none
     end,
-    if Winner == none -> none;
-       true -> 
-           {gameover, Winner},
-           io:format("GameOver!")
+    if Winner == none ->
+	   case lists:member("_", array:to_list(Board)) of
+	     true -> none;
+	     false -> io:format("Draw!~n"), draw
+	   end;
+       true -> {gameover, Winner}, io:format("GameOver!~n")
     end.
 
 %% Send players a notice. This could be messages to their clients
@@ -158,11 +155,13 @@ idle_wait(Event, _From, Data) ->
     unexpected(Event, idle_wait),
     {next_state, idle_wait, Data}.
 
-negotiate({move}, S = #state{}) ->
+negotiate({move}, S = #state{board = Board}) ->
     notice(S, "Your turn to move!", []),
+    printBoard({board, createBoardString(Board)}),
     {next_state, readytomove, S#state{}};
-negotiate({waitmove}, S = #state{}) ->
+negotiate({waitmove}, S = #state{board = Board}) ->
     notice(S, "Opponent is first to move!", []),
+    printBoard({board, createBoardString(Board)}),
     {next_state, waitformove, S#state{}};
 negotiate(Event, Data) ->
     unexpected(Event, negotiate),

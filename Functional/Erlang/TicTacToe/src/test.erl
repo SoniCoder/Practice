@@ -1,12 +1,14 @@
 -module(test).
 
 -import(ttt,
-	[accept_connect/1, connect/2, decide_move/2,
+	[accept_connect/1, cancel/1, connect/2, decide_move/2,
 	 move/3, printBoard/1, start_link/1]).
 
--export([acc/1, con/1, illmove/1, move/1, print/1, start/1]).
+-export([acc/1, close/1, con/1, illmove/1, move/1, print/1, start/1]).
 
 acc(C) -> accept_connect(whereis(C)).
+
+close(C) -> cancel(whereis(C)).
 
 con(C) ->
     case C of
@@ -29,4 +31,5 @@ start(C) ->
       c1 -> {ok, OwnPid} = start_link("c1");
       c2 -> {ok, OwnPid} = start_link("c2")
     end,
-    register(C, OwnPid).
+    register(C, OwnPid),
+    {ok, OwnPid}.

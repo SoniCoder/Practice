@@ -1,3 +1,7 @@
 [submodule "MPI/A11"]
 	path = MPI/A11
 	url = https://github.com/SoniCoder/Parallel_Computing-2018
+
+[submodule "Functional/Erlang/E-Chat/OTP_gen"]
+	path = Functional/Erlang/E-Chat/OTP_gen
+	url = https://github.com/SoniCoder/echatotp
