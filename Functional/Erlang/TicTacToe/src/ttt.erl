@@ -91,9 +91,11 @@ checkBoard(Board) ->
     if Winner == none ->
 	   case lists:member("_", array:to_list(Board)) of
 	     true -> none;
-	     false -> io:format("Draw!~n"), draw
+	     false -> io:format("Draw!~n"), {gameover, draw}
 	   end;
-       true -> {gameover, Winner}, io:format("GameOver!~n")
+       true ->
+	   {gameover, Winner},
+	   io:format("GameOver! ~p won!~n", [Winner])
     end.
 
 %% Send players a notice. This could be messages to their clients
@@ -175,7 +177,7 @@ readytomove({moveMade, X},
       "O" -> NewNextChar = "X"
     end,
     printBoard({board, createBoardString(NewBoard)}),
-    checkBoard(NewBoard),
+    Res = checkBoard(NewBoard),
     {next_state, waitformove,
      S#state{board = NewBoard, next_char = NewNextChar}};
 readytomove(Event, Data) ->
@@ -190,9 +192,15 @@ waitformove({moveMade, X},
       "O" -> NewNextChar = "X"
     end,
     printBoard({board, createBoardString(NewBoard)}),
-    checkBoard(NewBoard),
-    {next_state, readytomove,
-     S#state{board = NewBoard, next_char = NewNextChar}};
+    Res = checkBoard(NewBoard),
+    if Res == none ->
+	   {next_state, readytomove,
+	    S#state{board = NewBoard, next_char = NewNextChar}};
+       true ->
+	   {next_state, idle,
+	    S#state{board = array:new(9, {default, "_"}),
+		    next_char = "X"}}
+    end;
 waitformove(Event, Data) ->
     unexpected(Event, waitformove),
     {next_state, waitformove, Data}.
