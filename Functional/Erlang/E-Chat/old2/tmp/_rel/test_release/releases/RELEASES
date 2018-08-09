@@ -1,0 +1,8 @@
+%% coding: utf-8
+[{release,"test_release","1","9.3.3.1",
+          [{kernel,"5.4.3.1","./lib/kernel-5.4.3.1"},
+           {stdlib,"3.4.5","./lib/stdlib-3.4.5"},
+           {test,"0.1.0","./lib/test-0.1.0"},
+           {sasl,"3.1.2","./lib/sasl-3.1.2"},
+           {runtime_tools,"1.12.5","./lib/runtime_tools-1.12.5"}],
+          permanent}].

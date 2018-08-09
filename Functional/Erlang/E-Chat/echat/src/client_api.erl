@@ -10,7 +10,7 @@ current_timestamp() -> io_lib:format("[~2..0b:~2..0b:~2..0b]", tuple_to_list(tim
 create_message(Message, Sender) -> create_message(Message, Sender, false).
 
 create_message(Message, Sender, Private) ->
-    #message{timestamp=current_timestamp(),name=Sender, text=Message, private=Private}.
+    #message{time=time(), timestamp=current_timestamp(),name=Sender, text=Message, private=Private}.
 
 printStringList([]) -> ok;
 printStringList([H|T]) ->

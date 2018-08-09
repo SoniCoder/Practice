@@ -1,0 +1,7 @@
+{release,{"test_release","1"},
+         {erts,"9.3.3.1"},
+         [{kernel,"5.4.3.1"},
+          {stdlib,"3.4.5"},
+          {test,"0.1.0"},
+          {sasl,"3.1.2"},
+          {runtime_tools,"1.12.5"}]}. 

@@ -1,0 +1,12 @@
+screen ./clien.sh out1
+split -v
+split
+focus next
+screen ./clien.sh in1
+focus next
+screen ./clien.sh out2
+split
+focus next
+screen ./clien.sh in2
+focus next
+

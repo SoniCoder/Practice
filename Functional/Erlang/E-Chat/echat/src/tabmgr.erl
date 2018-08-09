@@ -8,5 +8,5 @@ start() ->
     mnesia:create_schema([node()]),
     mnesia:start(),
     mnesia:create_table(message,
-            [{attributes, record_info(fields, message)},{disc_copies, [node()]}]),
+            [{attributes, record_info(fields, message)},{disc_copies, [node()]}, {type, ordered_set}]),
     mnesia:stop().

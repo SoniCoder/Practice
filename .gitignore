@@ -1,1 +1,3 @@
 workarea/
+*.beam
+Cowboy_Tut/
