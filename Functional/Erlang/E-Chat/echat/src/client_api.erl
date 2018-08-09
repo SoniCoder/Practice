@@ -58,27 +58,27 @@ con(in, Name) ->
     Pid = whereis(chatsv),
     io:format("Welcome to E-Chat!~n~n"),
     gen_server:call(Pid, {broadcast, create_message(lists:concat([Name, " has entered the server.\n"]), "*Server*")}),
-    send_to_server(Name, Pid),
+    send_to_server(Name, chatsv),
     ok.
 
-send_to_server(Name, Pid) ->
+send_to_server(Name, SV_NAME) ->
     Text = io:get_line("enter message> "),
     {ok, RE_PRV} = re:compile("/w (\\w+) (.+\\n)"),
     case Text of
         "/l" ++ _ ->
-            ClientList = gen_server:call(Pid, {getclist}),
+            ClientList = gen_server:call(whereis(SV_NAME), {getclist}),
             printList(ClientList);
         "/w" ++ _ -> 
             {match, [ReceiverName | [MainText]]} =  re:run(Text, RE_PRV , [{capture, all_but_first, list}]),
-            gen_server:call(Pid, {unicast, create_message(MainText, Name, true), ReceiverName});
+            gen_server:call(whereis(SV_NAME), {unicast, create_message(MainText, Name, true), ReceiverName});
         "/q"++ _ ->
-            gen_server:call(Pid, {disconnect, Name}),
-            gen_server:call(Pid, {broadcast, create_message(lists:concat([Name, " has left the server.\n"]), "*Server*")}),
+            gen_server:call(whereis(SV_NAME), {disconnect, Name}),
+            gen_server:call(whereis(SV_NAME), {broadcast, create_message(lists:concat([Name, " has left the server.\n"]), "*Server*")}),
             exit(normal);
         _ ->
-            gen_server:call(Pid, {broadcast, create_message(Text, Name)})
+            gen_server:call(whereis(SV_NAME), {broadcast, create_message(Text, Name)})
     end,
-    send_to_server(Name, Pid).
+    send_to_server(Name, SV_NAME).
 
 close_server() ->
     gen_server:call(whereis(chatsv), {terminate}).

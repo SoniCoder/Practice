@@ -1,5 +1,5 @@
 %% coding: utf-8
-%% script generated at {2018,8,9} {10,2,38}
+%% script generated at {2018,8,9} {12,52,12}
 {script,
     {"echat_release","1"},
     [{preLoaded,
@@ -41,7 +41,9 @@
           queue,rand,random,re,sets,shell,shell_default,slave,sofs,string,
           supervisor_bridge,sys,timer,unicode,unicode_util,win32reg,zip]},
      {path,["$ROOT/lib/echat-0.1.0/ebin"]},
-     {primLoad,[baseinfo,client_api,db_functions,echat,message,tabmgr]},
+     {primLoad,
+         [baseinfo,client_api,clientinfo,db_functions,echat,message,scriber,
+          tabmgr]},
      {path,["$ROOT/lib/sasl-3.1.2/ebin"]},
      {primLoad,
          [alarm_handler,erlsrv,format_lib_supp,misc_supp,rb,rb_format_supp,
@@ -133,8 +135,8 @@
                    {vsn,"0.1.0"},
                    {id,[]},
                    {modules,
-                       [baseinfo,client_api,db_functions,echat,message,
-                        tabmgr]},
+                       [baseinfo,client_api,clientinfo,db_functions,echat,
+                        message,scriber,tabmgr]},
                    {registered,[]},
                    {applications,[kernel,stdlib]},
                    {included_applications,[]},

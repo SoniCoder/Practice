@@ -9,11 +9,11 @@
 -include("headers.hrl").
 
 -record(state,
-	{msglist, scribers, clientinfo, maxclients = 2}).
+	{msglist, scribers, clientinfo, maxclients = 200}).
 
 start_mnesia() ->
     mnesia:start(),
-    mnesia:wait_for_tables([message], 20000).
+    mnesia:wait_for_tables([message, scriber, clientinfo], 20000).
 
 start() ->
     start_mnesia(),
@@ -22,11 +22,19 @@ start() ->
 start_link() ->
     gen_server:start_link({local, chatsv}, ?MODULE, [], []).
 
+%%% Utilities
+
+remove_first_column(RecList) ->
+    [list_to_tuple(tl(tuple_to_list(Rec))) || Rec <- RecList].
+
 %%% Server functions
 init([]) ->
-    {ok,
-     #state{msglist = [], scribers = [],
-	    clientinfo = dict:new()}}. %% no treatment of info here!
+    {atomic, MList} = message:get_all(),
+    {atomic, ScriberList} = scriber:get_all(),
+    {atomic, ClientInfoList} = clientinfo:get_all(),
+    ClientInfoDict = dict:from_list(remove_first_column(ClientInfoList)), 
+     {ok, #state{msglist = MList, scribers = remove_first_column(ScriberList),
+	    clientinfo = ClientInfoDict}}. %% no treatment of info here!
 
 send_to_clients(_, []) -> ok;
 send_to_clients(Message, [Scriber | ScriberList]) ->
@@ -65,7 +73,11 @@ handle_call({subscribe, Name}, From,
 	   {reply, {error, "Error: Room is full!"}, S};
        true ->
 	   NewScriberList = [From | ScriberList],
-	   NewDict = dict:store(Name, From, Dict),
+       {Pid, Ref} = From,
+       scriber:create_or_update(tmp, #scriber{pid = Pid, ref = Ref}, []),
+        NewDict = dict:store(Name, From, Dict),
+       clientinfo:create_or_update(tmp, #clientinfo{name = Name, id = From}, []),
+        %io:format("Here is the state ~p~n", [S]),
 	   {reply,
 	    {ok,
 	     lists:reverse(lists:sublist(lists:reverse(MList), 3))},

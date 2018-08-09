@@ -1,6 +1,6 @@
 
 -record(message, {time, timestamp, name, text, private=false}).
--record(scriber, {scriber}).
+-record(scriber, {pid, ref}).
 -record(clientinfo, {name, id}).
 
 -type value()                    :: on | off | term().
