@@ -7,10 +7,10 @@
 
 current_timestamp() -> io_lib:format("[~2..0b:~2..0b:~2..0b]", tuple_to_list(time())).
 
-create_message(Message, Sender) -> create_message(Message, Sender, false).
+create_message(Message, Sender) -> create_message(Message, Sender, broadcast, false).
 
-create_message(Message, Sender, Private) ->
-    #message{time=time(), timestamp=current_timestamp(),name=Sender, text=Message, private=Private}.
+create_message(Message, Sender, ReceiverName, Private) ->
+    #message{time=time(), timestamp=current_timestamp(),name=Sender, text=Message, receiver = ReceiverName, private=Private}.
 
 printStringList([]) -> ok;
 printStringList([H|T]) ->
@@ -24,6 +24,7 @@ printList([H|T]) ->
 
 %%% Client API
 printMessage(M) ->
+    % io:format("This is M~p~n", [M]),
         if
             M#message.private == false ->
                     io:format("~-12s ~-10s : ~s", [M#message.timestamp, M#message.name, M#message.text]);
@@ -70,7 +71,7 @@ send_to_server(Name, SV_NAME) ->
             printList(ClientList);
         "/w" ++ _ -> 
             {match, [ReceiverName | [MainText]]} =  re:run(Text, RE_PRV , [{capture, all_but_first, list}]),
-            gen_server:call(whereis(SV_NAME), {unicast, create_message(MainText, Name, true), ReceiverName});
+            gen_server:call(whereis(SV_NAME), {unicast, create_message(MainText, Name, ReceiverName, true), ReceiverName});
         "/q"++ _ ->
             gen_server:call(whereis(SV_NAME), {disconnect, Name}),
             gen_server:call(whereis(SV_NAME), {broadcast, create_message(lists:concat([Name, " has left the server.\n"]), "*Server*")}),
@@ -78,7 +79,7 @@ send_to_server(Name, SV_NAME) ->
         _ ->
             gen_server:call(whereis(SV_NAME), {broadcast, create_message(Text, Name)})
     end,
-    send_to_server(Name, whereis(SV_NAME)).
+    send_to_server(Name, SV_NAME).
 
 close_server() ->
     gen_server:call(whereis(chatsv), {terminate}).

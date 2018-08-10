@@ -1,5 +1,5 @@
 
--record(message, {time, timestamp, name, text, private=false}).
+-record(message, {time, timestamp, name, text, private=false, receiver=broadcast}).
 -record(scriber, {pid, ref}).
 -record(clientinfo, {name, id}).
 
