@@ -11,23 +11,28 @@
 -record(state,
 	{msglist, scribers, clientinfo, maxclients = 200}).
 
+-spec start_mnesia() -> any().
 start_mnesia() ->
     mnesia:start(),
     mnesia:wait_for_tables([message, scriber, clientinfo],
 			   20000).
 
+-spec start() -> {ok, pid()}.
 start() -> start_mnesia(), start_link().
 
+-spec start_link() -> any().
 start_link() ->
     gen_server:start_link({local, chatsv}, ?MODULE, [], []).
 
 %%% Utilities
 
+-spec remove_first_column(list(any())) -> list(any()).
 remove_first_column(RecList) ->
     [list_to_tuple(tl(tuple_to_list(Rec)))
      || Rec <- RecList].
 
 %%% Server functions
+-spec init(list()) -> {ok, State :: #state{}}.
 init([]) ->
     {atomic, MList} = message:get_all(),
     {atomic, ScriberList} = scriber:get_all(),
@@ -40,6 +45,7 @@ init([]) ->
 	    clientinfo =
 		ClientInfoDict}}. %% no treatment of info here!
 
+-spec send_to_clients(message(), list(clientid())) -> any().
 send_to_clients(_, []) -> ok;
 send_to_clients(Message, [Scriber | ScriberList]) ->
     gen_server:reply(Scriber, Message),

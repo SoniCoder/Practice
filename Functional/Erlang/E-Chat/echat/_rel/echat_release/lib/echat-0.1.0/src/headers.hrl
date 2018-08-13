@@ -1,7 +1,19 @@
 
--record(message, {time, timestamp, name, text, private=false, receiver=broadcast}).
--record(scriber, {pid, ref}).
--record(clientinfo, {name, id}).
+-record(message, {
+    time                    :: time(),
+    timestamp               :: string(), 
+    name                    :: string(),
+    text                    :: string(),
+    private=false           :: 'true' | 'false',
+    receiver=broadcast      :: string()}).
+
+
+-record(scriber, {
+    pid                     :: pid(), 
+    ref                     :: reference()}).
+-record(clientinfo, {
+    name                    :: string(),
+    id                      :: clientid()}).
 
 -type value()                    :: on | off | term().
 -type bucket()                   :: atom().
@@ -13,3 +25,9 @@
 -type db_whereclauselist()       :: list({atom(),db_operator(),term()}).
 -type db_columnlist()            :: list(atom()).
 -type db_columnname()            :: atom().
+
+-type time()                     :: calendar:time().
+
+-type clientid()                 :: #scriber{}.
+-type message()                  :: #message{}.
+-type clientinfo()               :: #clientinfo{}.
